@@ -1,0 +1,390 @@
+import { portfolio } from "./portfolio.config.js";
+
+const $ = (selector) => document.querySelector(selector);
+const createTags = (items) =>
+  items.map((item) => `<li class="tag">${item}</li>`).join("");
+
+const arrowIcon = `
+  <svg viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+
+const projectIcons = {
+  enterprise: `
+    <svg viewBox="0 0 180 180" aria-hidden="true">
+      <rect x="30" y="35" width="120" height="110" rx="18" />
+      <path d="M30 65h120M60 35v110" />
+      <circle cx="45" cy="50" r="3" class="icon-fill" />
+      <circle cx="96" cy="88" r="8" />
+      <path d="M78 119c4-12 12-18 18-18s14 6 18 18M124 112V83M112 100l12 12 17-25" />
+    </svg>`,
+  kitchen: `
+    <svg viewBox="0 0 180 180" aria-hidden="true">
+      <path d="M42 117h96M51 111c2-30 18-49 39-49s37 19 39 49H51Z" />
+      <path d="M82 62a8 8 0 0 1 16 0M68 134h44" />
+      <path d="M68 51c-8-8 5-14-2-22M91 48c-8-9 7-15-1-24M113 52c-7-8 6-14-1-21" class="icon-steam" />
+      <circle cx="136" cy="47" r="18" class="icon-cloud" />
+      <path d="M123 50h28" class="icon-cloud-line" />
+    </svg>`,
+};
+
+function renderNavigation() {
+  $("#nav-links").innerHTML = portfolio.navigation
+    .map(({ label, href }) => `<a href="${href}">${label}</a>`)
+    .join("");
+}
+
+function renderHero() {
+  const { personal, stats } = portfolio;
+
+  $("#hero-copy").innerHTML = `
+    <div class="status"><span></span> Based in ${personal.location}</div>
+    <h1 id="hero-title">Building digital<br />experiences with<br /><em>purpose.</em></h1>
+    <p class="hero__lede">${personal.tagline}</p>
+    <div class="hero__actions">
+      <a class="button" href="#work">View selected work ${arrowIcon}</a>
+      <a class="text-link" href="${personal.resume}" target="_blank" rel="noreferrer">View résumé <span>↗</span></a>
+    </div>
+    <div class="hero__metrics">
+      <dl class="stats">
+        ${stats
+          .map(
+            ({ value, suffix, label }) => `
+              <div class="stat">
+                <dt><span>${value}</span>${suffix}</dt>
+                <dd>${label}</dd>
+              </div>`,
+          )
+          .join("")}
+      </dl>
+      <div class="hero__socials hero__socials--metrics" aria-label="Social profiles">
+        <a href="${personal.linkedin}" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+        <a href="${personal.github}" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+      </div>
+    </div>`;
+
+  $("#hero-visual").innerHTML = `
+    <div class="profile-card glass">
+      <div class="profile-card__top">
+        <span class="window-dots"><i></i><i></i><i></i></span>
+        <span>principles.md</span>
+      </div>
+      <div class="profile-card__body">
+        <div class="monogram-wrap">
+          <div class="orbit orbit--one"><span></span></div>
+          <div class="orbit orbit--two"><span></span></div>
+          <div class="monogram">${personal.initials}</div>
+        </div>
+        <div class="principles" aria-label="Engineering principles">
+          <div class="principle">
+            <span>01</span>
+            <p><strong>Think in systems.</strong><small>Logic before syntax.</small></p>
+          </div>
+          <div class="principle">
+            <span>02</span>
+            <p><strong>Code for humans.</strong><small>Clean. Scalable. Maintainable.</small></p>
+          </div>
+          <div class="principle">
+            <span>03</span>
+            <p><strong>Ship. Learn. Refactor.</strong><small>Better with every iteration.</small></p>
+          </div>
+        </div>
+      </div>
+      <div class="profile-card__footer">
+        <span>${personal.focus}</span>
+        <span class="signal"><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>`;
+}
+
+function renderAbout() {
+  $("#about-content").innerHTML = `
+    <div class="about-copy reveal">
+      <p>${portfolio.personal.summary}</p>
+      <p>I care about the details behind a polished interface: predictable state, efficient data flow, responsive behavior, and a codebase that teammates can confidently extend.</p>
+    </div>
+    <div class="skills-grid">
+      ${portfolio.skills
+        .map(
+          (group, index) => `
+            <article class="skill-card glass reveal" style="--delay: ${index * 90}ms">
+              <span class="skill-card__number">0${index + 1}</span>
+              <h3>${group.title}</h3>
+              <p>${group.description}</p>
+              <ul class="tags" aria-label="${group.title} skills">${createTags(group.items)}</ul>
+            </article>`,
+        )
+        .join("")}
+    </div>`;
+}
+
+function renderExperience() {
+  $("#experience-list").innerHTML = portfolio.experience
+    .map(
+      (company) => `
+        <article class="experience glass reveal">
+          <aside class="experience__meta">
+            <span class="experience__line"></span>
+            <p>${company.period}</p>
+            <p>${company.location}</p>
+          </aside>
+          <div class="experience__body">
+            <div class="experience__title">
+              <div>
+                <span class="eyebrow">Professional experience</span>
+                <h3>${company.company}</h3>
+              </div>
+            </div>
+            <div class="experience__roles">
+              ${company.roles
+                .map(
+                  (role) => `
+                    <section class="experience-role">
+                      <div class="experience-role__heading">
+                        <div>
+                          <h4>${role.role}</h4>
+                          <p>${role.period} <span>·</span> ${role.duration}</p>
+                        </div>
+                        ${role.current ? '<span class="experience__badge">Current role</span>' : '<span class="experience__badge experience__badge--previous">Previous role</span>'}
+                      </div>
+                      <p class="experience__intro">${role.intro}</p>
+                      <ul class="impact-list">
+                        ${role.highlights.map((highlight) => `<li>${highlight}</li>`).join("")}
+                      </ul>
+                      <ul class="tags" aria-label="Technologies used as ${role.role}">${createTags(role.technologies)}</ul>
+                    </section>`,
+                )
+                .join("")}
+            </div>
+          </div>
+        </article>`,
+    )
+    .join("");
+}
+
+function renderProjects() {
+  $("#projects-list").innerHTML = portfolio.projects
+    .map(
+      (project, index) => `
+        <article class="project-card project-card--${project.accent} glass reveal" style="--delay: ${index * 90}ms">
+          <div class="project-card__head">
+            <span>${project.number}</span>
+            <span class="project-card__context"><i></i>${project.type}</span>
+          </div>
+          <div class="project-card__layout">
+            <div class="project-card__art" aria-hidden="true">
+              <div class="project-card__shape"></div>
+              <div class="project-card__icon">${projectIcons[project.icon]}</div>
+            </div>
+            <div class="project-card__content">
+              <h3>${project.title}</h3>
+              <p>${project.description}</p>
+              <div class="project-card__contribution"><span>My contribution</span>${project.contribution}</div>
+              <ul class="tags" aria-label="Project technologies">${createTags(project.technologies)}</ul>
+              ${
+                project.url
+                  ? `<a class="project-card__link" href="${project.url}" target="_blank" rel="noreferrer">${project.linkLabel} ${arrowIcon}</a>`
+                  : ""
+              }
+            </div>
+          </div>
+        </article>`,
+    )
+    .join("");
+}
+
+function renderCredentials() {
+  const { education, awards, publications } = portfolio.credentials;
+  $("#credentials-list").innerHTML = `
+    ${education.history
+      .map(
+        (item, index) => `
+          <article class="credential credential--education glass reveal" style="--delay: ${index * 70}ms">
+            <span class="credential__label">${education.label}</span>
+            <div class="credential__icon">⌁</div>
+            <h3>${item.degree}</h3>
+            <p>${item.school}</p>
+            <p class="credential__affiliation"><span>${item.affiliationLabel}</span>${item.affiliation}</p>
+            <div class="credential__meta"><span>${item.period}</span></div>
+            ${
+              item.extras?.length
+                ? `<button class="education-item__toggle" type="button" aria-expanded="false">
+                    <span>See activities</span><i>+</i>
+                  </button>
+                  <div class="education-item__details" hidden>
+                    <ul class="education-extras">
+                      ${item.extras
+                        .map(
+                          (extra) => `
+                            <li>
+                              ${
+                                extra.url
+                                  ? `<a href="${extra.url}" target="_blank" rel="noreferrer"><span>${extra.label}</span>${arrowIcon}</a>`
+                                  : `<span>${extra.label}</span>`
+                              }
+                            </li>`,
+                        )
+                        .join("")}
+                    </ul>
+                  </div>`
+                : ""
+            }
+          </article>`,
+      )
+      .join("")}
+    ${awards
+      .map(
+        (award, index) => `
+          <article class="credential credential--recognition ${index === 0 ? "credential--group-start" : ""} glass reveal" style="--delay: ${90 + index * 70}ms">
+            <span class="credential__label">${award.label}</span>
+            <div class="credential__icon">✦</div>
+            <h3>${award.title}</h3>
+            <p>${award.organization}</p>
+            <p class="credential__foot">${award.description}</p>
+            ${award.url ? `<a class="credential__link" href="${award.url}" target="_blank" rel="noreferrer">View recognition ${arrowIcon}</a>` : ""}
+          </article>`,
+      )
+      .join("")}
+    ${publications
+      .map(
+        (publication, index) => `
+          <article class="credential credential--publication ${index === 0 ? "credential--group-start" : ""} glass reveal" style="--delay: ${180 + index * 70}ms">
+            <span class="credential__label">${publication.label}</span>
+            <div class="credential__icon">↗</div>
+            <h3>${publication.title}</h3>
+            ${publication.description ? `<p>${publication.description}</p>` : ""}
+            <div class="credential__foot publication-journal">
+              <span>Published in</span>
+              <strong>${publication.journal}</strong>
+            </div>
+            ${publication.url ? `<a class="credential__link" href="${publication.url}" target="_blank" rel="noreferrer">Read publication ${arrowIcon}</a>` : ""}
+          </article>`,
+      )
+      .join("")}`;
+}
+
+function renderContact() {
+  const { personal } = portfolio;
+  $("#contact-panel").innerHTML = `
+    <span class="eyebrow">05 / Contact</span>
+    <h2 id="contact-title">Have an interesting<br />problem to solve?</h2>
+    <p>Let’s talk about the product, the people using it, and the cleanest way to bring it to life.</p>
+    <div class="contact__actions">
+      <a class="button button--light" href="mailto:${personal.email}">Start a conversation ${arrowIcon}</a>
+      <a class="contact__mail" href="mailto:${personal.email}">${personal.email}</a>
+    </div>
+    <div class="contact__links">
+      <a href="${personal.linkedin}" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+      <a href="${personal.github}" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+      <a href="${personal.resume}" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
+      <a href="tel:${personal.phoneHref}">${personal.phone}</a>
+    </div>`;
+}
+
+function renderFooter() {
+  $("#footer").innerHTML = `
+    <p>© ${new Date().getFullYear()} ${portfolio.personal.name}</p>
+    <p>Designed & built with intention.</p>
+    <a href="#top">Back to top ↑</a>`;
+}
+
+function setupInteractions() {
+  const toggle = $(".nav__toggle");
+  const navLinks = $("#nav-links");
+  const header = $(".site-header");
+  const glow = $(".cursor-glow");
+
+  toggle.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    navLinks.classList.toggle("is-open", !isOpen);
+  });
+
+  navLinks.addEventListener("click", (event) => {
+    if (event.target.matches("a")) {
+      toggle.setAttribute("aria-expanded", "false");
+      navLinks.classList.remove("is-open");
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const moreButton = event.target.closest(".education-item__toggle");
+    if (!moreButton) return;
+
+    const details = moreButton.nextElementSibling;
+    const isExpanded = moreButton.getAttribute("aria-expanded") === "true";
+    moreButton.setAttribute("aria-expanded", String(!isExpanded));
+    moreButton.querySelector("span").textContent = isExpanded ? "See activities" : "Hide activities";
+    moreButton.querySelector("i").textContent = isExpanded ? "+" : "−";
+    details.hidden = isExpanded;
+  });
+
+  window.addEventListener("scroll", () => header.classList.toggle("is-scrolled", window.scrollY > 24), {
+    passive: true,
+  });
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      glow.style.transform = `translate(${event.clientX - 220}px, ${event.clientY - 220}px)`;
+    },
+    { passive: true },
+  );
+
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 },
+  );
+  document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
+
+  // A short fallback prevents content from remaining hidden if a browser delays
+  // IntersectionObserver callbacks during restoration or deep-link navigation.
+  window.setTimeout(() => {
+    document.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
+  }, 900);
+
+  const sections = [...document.querySelectorAll("main section[id]")];
+  const menuItems = [...document.querySelectorAll(".nav__links a")];
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        menuItems.forEach((item) => {
+          item.classList.toggle("is-active", item.getAttribute("href") === `#${entry.target.id}`);
+        });
+      });
+    },
+    { rootMargin: "-30% 0px -60%", threshold: 0 },
+  );
+  sections.forEach((section) => sectionObserver.observe(section));
+}
+
+renderNavigation();
+renderHero();
+renderAbout();
+renderExperience();
+renderProjects();
+renderCredentials();
+renderContact();
+renderFooter();
+setupInteractions();
+
+// The browser may resolve a deep-link hash before configuration-driven sections
+// have their final height. Re-apply it once rendering has completed.
+if (window.location.hash) {
+  const alignDeepLink = () => {
+    const target = document.querySelector(window.location.hash);
+    target?.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
+    target?.scrollIntoView({ block: "start" });
+  };
+
+  requestAnimationFrame(() => requestAnimationFrame(alignDeepLink));
+  window.addEventListener("load", () => window.setTimeout(alignDeepLink, 50), { once: true });
+}

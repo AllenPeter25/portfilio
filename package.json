@@ -1,0 +1,10 @@
+{
+  "name": "allen-peter-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve .",
+    "check": "node --check app.js && node --check portfolio.config.js"
+  }
+}

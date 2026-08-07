@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Allen Peter — Software Engineer specializing in Angular, TypeScript, RxJS, and enterprise web applications."
+    />
+    <meta name="theme-color" content="#0b1020" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Allen Peter — Software Engineer" />
+    <meta
+      property="og:description"
+      content="Portfolio of Allen Peter, an Angular and TypeScript software engineer building thoughtful enterprise experiences."
+    />
+    <title>Allen Peter — Software Engineer</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%230b1020%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 font-family=%22Arial%22 font-weight=%22700%22 fill=%22%236ee7c8%22>AP</text></svg>" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <div class="ambient" aria-hidden="true">
+      <div class="ambient__orb ambient__orb--one"></div>
+      <div class="ambient__orb ambient__orb--two"></div>
+      <div class="ambient__grid"></div>
+      <div class="cursor-glow"></div>
+    </div>
+
+    <header class="site-header" id="top">
+      <nav class="nav glass" aria-label="Primary navigation">
+        <a class="nav__brand" href="#top" aria-label="Allen Peter, back to top">
+          <span class="nav__mark">AP</span>
+          <span class="nav__name">Allen Peter</span>
+        </a>
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span>
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+        <div class="nav__links" id="nav-links"></div>
+        <a class="button button--small nav__cta" href="mailto:apeter753@gmail.com">Let's talk</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section class="hero section" id="home" aria-labelledby="hero-title">
+        <div class="hero__copy reveal" id="hero-copy"></div>
+        <div class="hero__visual reveal reveal--delay" id="hero-visual" aria-label="Technology profile"></div>
+      </section>
+
+      <section class="section section--about" id="about" aria-labelledby="about-title">
+        <div class="section-heading reveal">
+          <span class="eyebrow">01 / About</span>
+          <h2 id="about-title">Engineering clarity<br />into complexity.</h2>
+        </div>
+        <div class="about-grid" id="about-content"></div>
+      </section>
+
+      <section class="section" id="experience" aria-labelledby="experience-title">
+        <div class="section-heading section-heading--row reveal">
+          <div>
+            <span class="eyebrow">02 / Experience</span>
+            <h2 id="experience-title">Where I’ve made an impact.</h2>
+          </div>
+          <span class="section-heading__note">Sep 2022 — Present</span>
+        </div>
+        <div id="experience-list"></div>
+      </section>
+
+      <section class="section" id="work" aria-labelledby="work-title">
+        <div class="section-heading reveal">
+          <span class="eyebrow">03 / Selected work</span>
+          <h2 id="work-title">Products built for<br />real-world use.</h2>
+        </div>
+        <div class="projects-grid" id="projects-list"></div>
+      </section>
+
+      <section class="section" id="credentials" aria-labelledby="credentials-title">
+        <div class="section-heading reveal">
+          <span class="eyebrow">04 / Beyond the code</span>
+          <h2 id="credentials-title">Learning, leading,<br />and sharing.</h2>
+        </div>
+        <div class="credentials-grid" id="credentials-list"></div>
+      </section>
+
+      <section class="section contact" id="contact" aria-labelledby="contact-title">
+        <div class="contact__panel glass reveal" id="contact-panel"></div>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer"></footer>
+    <noscript>This portfolio needs JavaScript enabled to display its configuration-driven content.</noscript>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
