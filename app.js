@@ -36,6 +36,7 @@ function renderNavigation() {
 
 function renderHero() {
   const { personal, stats } = portfolio;
+  const visibleStats = stats.filter(({ enabled = true }) => enabled);
 
   $("#hero-copy").innerHTML = `
     <div class="status"><span></span> Based in ${personal.location}</div>
@@ -43,20 +44,21 @@ function renderHero() {
     <p class="hero__lede">${personal.tagline}</p>
     <div class="hero__actions">
       <a class="button" href="#work">View selected work ${arrowIcon}</a>
-      <a class="text-link" href="${personal.resume}" target="_blank" rel="noreferrer">View résumé <span>↗</span></a>
+      ${personal.resume.enabled ? `<a class="text-link" href="${personal.resume.url}" target="_blank" rel="noreferrer">View résumé <span>↗</span></a>` : ""}
     </div>
     <div class="hero__metrics">
-      <dl class="stats">
-        ${stats
-          .map(
-            ({ value, suffix, label }) => `
-              <div class="stat">
-                <dt><span>${value}</span>${suffix}</dt>
-                <dd>${label}</dd>
-              </div>`,
-          )
-          .join("")}
-      </dl>
+      ${visibleStats.length ? `
+        <dl class="stats">
+          ${visibleStats
+            .map(
+              ({ value, suffix, label }) => `
+                <div class="stat">
+                  <dt><span>${value}</span>${suffix}</dt>
+                  <dd>${label}</dd>
+                </div>`,
+            )
+            .join("")}
+        </dl>` : ""}
       <div class="hero__socials hero__socials--metrics" aria-label="Social profiles">
         <a href="${personal.linkedin}" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
         <a href="${personal.github}" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
@@ -165,7 +167,10 @@ function renderExperience() {
 function renderProjects() {
   $("#projects-list").innerHTML = portfolio.projects
     .map(
-      (project, index) => `
+      (project, index) => {
+        const architectureId = `project-architecture-${index}`;
+
+        return `
         <article class="project-card project-card--${project.accent} glass reveal" style="--delay: ${index * 90}ms">
           <div class="project-card__head">
             <span>${project.number}</span>
@@ -182,13 +187,35 @@ function renderProjects() {
               <div class="project-card__contribution"><span>My contribution</span>${project.contribution}</div>
               <ul class="tags" aria-label="Project technologies">${createTags(project.technologies)}</ul>
               ${
-                project.url
-                  ? `<a class="project-card__link" href="${project.url}" target="_blank" rel="noreferrer">${project.linkLabel} ${arrowIcon}</a>`
+                project.url || project.architecture
+                  ? `<div class="project-card__actions">
+                      ${
+                        project.url
+                          ? `<a class="project-card__link" href="${project.url}" target="_blank" rel="noreferrer">${project.linkLabel} ${arrowIcon}</a>`
+                          : ""
+                      }
+                      ${
+                        project.architecture
+                          ? `<button class="project-card__link project-card__architecture-toggle" type="button" aria-expanded="false" aria-controls="${architectureId}"><span class="project-card__architecture-label">View architecture</span><span aria-hidden="true">↓</span></button>`
+                          : ""
+                      }
+                    </div>`
                   : ""
               }
             </div>
           </div>
-        </article>`,
+          ${
+            project.architecture
+              ? `<figure class="project-card__architecture" id="${architectureId}" hidden>
+                  <a href="${project.architecture.image}" target="_blank" rel="noreferrer" aria-label="Open ${project.title} architecture at full size">
+                    <img src="${project.architecture.image}" alt="${project.architecture.alt}" loading="lazy" decoding="async" />
+                  </a>
+                  <figcaption>System architecture <span>Tap the image to view full size.</span></figcaption>
+                </figure>`
+              : ""
+          }
+        </article>`;
+      },
     )
     .join("");
 }
@@ -209,7 +236,7 @@ function renderCredentials() {
             ${
               item.extras?.length
                 ? `<button class="education-item__toggle" type="button" aria-expanded="false">
-                    <span>See activities</span><i>+</i>
+                    <span>See highlights</span><i>+</i>
                   </button>
                   <div class="education-item__details" hidden>
                     <ul class="education-extras">
@@ -219,7 +246,7 @@ function renderCredentials() {
                             <li>
                               ${
                                 extra.url
-                                  ? `<a href="${extra.url}" target="_blank" rel="noreferrer"><span>${extra.label}</span>${arrowIcon}</a>`
+                                  ? `<a href="${extra.url}" target="_blank" rel="noreferrer"><span>${extra.label}</span><span class="education-extras__arrow" aria-hidden="true">↗</span></a>`
                                   : `<span>${extra.label}</span>`
                               }
                             </li>`,
@@ -276,7 +303,7 @@ function renderContact() {
     <div class="contact__links">
       <a href="${personal.linkedin}" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
       <a href="${personal.github}" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
-      <a href="${personal.resume}" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
+      ${personal.resume.enabled ? `<a href="${personal.resume.url}" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>` : ""}
       <a href="tel:${personal.phoneHref}">${personal.phone}</a>
     </div>`;
 }
@@ -308,13 +335,26 @@ function setupInteractions() {
   });
 
   document.addEventListener("click", (event) => {
+    const architectureButton = event.target.closest(".project-card__architecture-toggle");
+    if (architectureButton) {
+      const architecture = document.getElementById(architectureButton.getAttribute("aria-controls"));
+      const isExpanded = architectureButton.getAttribute("aria-expanded") === "true";
+      architectureButton.setAttribute("aria-expanded", String(!isExpanded));
+      architectureButton.querySelector(".project-card__architecture-label").textContent = isExpanded
+        ? "View architecture"
+        : "Hide architecture";
+      architectureButton.querySelector("[aria-hidden]").textContent = isExpanded ? "↓" : "↑";
+      architecture.hidden = isExpanded;
+      return;
+    }
+
     const moreButton = event.target.closest(".education-item__toggle");
     if (!moreButton) return;
 
     const details = moreButton.nextElementSibling;
     const isExpanded = moreButton.getAttribute("aria-expanded") === "true";
     moreButton.setAttribute("aria-expanded", String(!isExpanded));
-    moreButton.querySelector("span").textContent = isExpanded ? "See activities" : "Hide activities";
+    moreButton.querySelector("span").textContent = isExpanded ? "See highlights" : "Hide highlights";
     moreButton.querySelector("i").textContent = isExpanded ? "+" : "−";
     details.hidden = isExpanded;
   });

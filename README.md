@@ -6,6 +6,8 @@ A responsive, configuration-driven portfolio with a dark glassmorphism visual sy
 
 All portfolio text, links, roles, skills, projects, and credentials live in `portfolio.config.js`. Edit that file; the page renders it automatically.
 
+Optional UI content has an `enabled` boolean beside its data. Set `personal.resume.enabled` to show or hide résumé links, and set a `stats` entry's `enabled` value to show or hide that metric.
+
 Education extras support optional navigation. Add a URL and the activity automatically becomes an external arrow link; leave it empty to render plain text:
 
 ```js

@@ -13,7 +13,10 @@ export const portfolio = {
     phoneHref: "+918495826426",
     linkedin: "https://www.linkedin.com/in/allenpeter7",
     github: "https://github.com/AllenPeter25",
-    resume: "/Resume.pdf",
+    resume: {
+      url: "/Resume.pdf",
+      enabled: false,
+    },
     tagline: "I turn complex product requirements into fast, intuitive web experiences.",
     summary:
       "Software Engineer with 4 years of experience building enterprise web applications, specializing in Angular, TypeScript, and RxJS. I work across the stack, connect thoughtful interfaces to reliable APIs, and enjoy making complex systems feel simple.",
@@ -24,11 +27,12 @@ export const portfolio = {
     { label: "About", href: "#about" },
     { label: "Experience", href: "#experience" },
     { label: "Work", href: "#work" },
+    { label: "Education", href: "#credentials" },
     { label: "Contact", href: "#contact" },
   ],
 
   stats: [
-    { value: "4", suffix: " yrs", label: "Professional Experience" }
+    { value: "4", suffix: " yrs", label: "Professional Experience", enabled: true }
   ],
 
   skills: [
@@ -40,12 +44,12 @@ export const portfolio = {
     {
       title: "Backend & APIs",
       description: "Practical full-stack support and efficient data flows.",
-      items: ["Java", "Spring Boot", "REST APIs", "GraphQL", "PostgreSQL"],
+      items: ["Spring Boot", "Java", "REST APIs", "PostgreSQL"],
     },
     {
       title: "Ways of working",
       description: "Quality delivery through collaboration and iteration.",
-      items: ["Git", "Postman", "Vercel", "Code Reviews", "Agile", "POC Development"],
+      items: ["Git", "Postman", "Code Reviews", "Agile", "POC Development"],
     },
   ],
 
@@ -97,8 +101,8 @@ export const portfolio = {
       description:
         "Product experiences for lead, opportunity, and quota management, with efficient REST and GraphQL integrations and interactive analytics dashboards.",
       contribution:
-        "Frontend feature development, API optimization, reporting visualizations, release delivery, and Spring Boot feature support.",
-      technologies: ["Angular", "RxJS", "GraphQL", "Highcharts", "Spring Boot"],
+        "Frontend feature development, API optimization, reporting visualizations, release delivery, and Bug fixes",
+      technologies: ["Angular", "RxJS", "API integration", "Optimization" , "Highcharts"],
       accent: "mint",
       icon: "enterprise",
     },
@@ -107,14 +111,18 @@ export const portfolio = {
       title: "Cloud Kitchen Platform",
       type: "Freelance Project · Full Stack",
       description:
-        "A responsive customer-facing experience and an admin portal with complete CRUD content management for a cloud-kitchen business.",
+        "A cloud-kitchen recipe platform with recipe management, image uploads through Cloudinary, and embedded YouTube content.",
       contribution:
-        "Built reusable Angular components, routing and reactive forms, plus a Spring Boot and PostgreSQL backend exposing REST APIs. Set up custom-domain deployment and Git-based delivery on Vercel.",
-      technologies: ["Angular", "Spring Boot", "PostgreSQL", "REST", "Vercel"],
+        "Built the Angular frontend and a Spring Boot microservices architecture with an API gateway, service discovery, PostgreSQL persistence, Cloudinary media storage, and containerized deployments.",
+      technologies: ["Angular", "Spring Boot", "Spring Cloud", "PostgreSQL", "Cloudinary", "Docker"],
       accent: "violet",
       icon: "kitchen",
       url: "https://www.jinroskitchens.co.in/",
       linkLabel: "Visit Jinros Kitchens",
+      architecture: {
+        image: "./docs/architecture/jinros-kitchen-system-architecture-v2.png",
+        alt: "Jinros Kitchen system architecture showing the Angular client, Spring Boot microservices, PostgreSQL, Cloudinary, deployment, and monitoring.",
+      },
     },
   ],
 
@@ -132,6 +140,11 @@ export const portfolio = {
             {
               label: "Secretary, Music Club · 2020–2021",
               url: "", // Add a URL to display this activity as an arrow link.
+            },
+            {
+              label:
+                "Final-year project selected as the department nominee for VTU Financial Assistance for Innovative Projects · 2021–22",
+              url: "https://mite.ac.in/wp-content/uploads/2023/02/VTU-Innovative-Project-Proceedings.pdf",
             },
           ],
         },

@@ -24,6 +24,8 @@
 }
 
 html {
+  max-width: 100%;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   scrollbar-color: rgba(110, 231, 200, 0.5) var(--bg);
 }
@@ -1189,7 +1191,6 @@ h1 em {
 .project-card__link {
   display: inline-flex;
   width: fit-content;
-  margin-top: 28px;
   padding: 12px 16px;
   align-items: center;
   gap: 10px;
@@ -1199,7 +1200,16 @@ h1 em {
   color: var(--project-color);
   font-size: 0.76rem;
   font-weight: 750;
+  cursor: pointer;
   transition: transform 180ms ease, background 180ms ease;
+}
+
+.project-card__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .project-card__link svg {
@@ -1209,6 +1219,45 @@ h1 em {
 .project-card__link:hover {
   background: color-mix(in srgb, var(--project-color) 18%, transparent);
   transform: translateY(-2px);
+}
+
+.project-card__architecture {
+  margin: 4px 0 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.project-card__architecture[hidden] {
+  display: none;
+}
+
+.project-card__architecture a {
+  display: block;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--project-color) 28%, transparent);
+  border-radius: 16px;
+  background: rgba(5, 10, 20, 0.35);
+}
+
+.project-card__architecture img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project-card__architecture figcaption {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  justify-content: space-between;
+  color: var(--project-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.project-card__architecture figcaption span {
+  color: var(--muted);
+  font-weight: 500;
 }
 
 .credentials-grid {
@@ -1412,17 +1461,18 @@ h1 em {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  color: var(--mint);
-  font-weight: 700;
+  color: inherit;
+  font-weight: inherit;
 }
 
-.education-extras a svg {
-  width: 16px;
+.education-extras__arrow {
+  color: var(--mint);
+  font-size: 0.95rem;
   transition: transform 180ms ease;
 }
 
-.education-extras a:hover svg {
-  transform: translateX(3px);
+.education-extras a:hover .education-extras__arrow {
+  transform: translate(2px, -2px);
 }
 
 .education-item__details[hidden] {
@@ -1872,6 +1922,22 @@ h1 em {
   .project-card,
   .credential {
     padding: 24px;
+  }
+
+  .project-card__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .project-card__link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .project-card__architecture figcaption {
+    gap: 2px;
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .experience__title {
