@@ -1214,6 +1214,16 @@ h1 em {
 
 .project-card__link svg {
   width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+}
+
+.project-card__architecture-toggle svg {
+  transition: transform 180ms ease;
+}
+
+.project-card__architecture-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
 }
 
 .project-card__link:hover {

@@ -9,6 +9,11 @@ const arrowIcon = `
     <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
 
+const expandIcon = `
+  <svg viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M10 4v12M5 11l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+
 const projectIcons = {
   enterprise: `
     <svg viewBox="0 0 180 180" aria-hidden="true">
@@ -196,7 +201,7 @@ function renderProjects() {
                       }
                       ${
                         project.architecture
-                          ? `<button class="project-card__link project-card__architecture-toggle" type="button" aria-expanded="false" aria-controls="${architectureId}"><span class="project-card__architecture-label">View architecture</span><span aria-hidden="true">↓</span></button>`
+                          ? `<button class="project-card__link project-card__architecture-toggle" type="button" aria-expanded="false" aria-controls="${architectureId}"><span class="project-card__architecture-label">View architecture</span>${expandIcon}</button>`
                           : ""
                       }
                     </div>`
@@ -343,7 +348,6 @@ function setupInteractions() {
       architectureButton.querySelector(".project-card__architecture-label").textContent = isExpanded
         ? "View architecture"
         : "Hide architecture";
-      architectureButton.querySelector("[aria-hidden]").textContent = isExpanded ? "↓" : "↑";
       architecture.hidden = isExpanded;
       return;
     }
