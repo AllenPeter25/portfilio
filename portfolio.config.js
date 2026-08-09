@@ -118,7 +118,7 @@ export const portfolio = {
       accent: "violet",
       icon: "kitchen",
       url: "https://www.jinroskitchens.co.in/",
-      linkLabel: "Visit Jinros Kitchens",
+      linkLabel: "Visit jinroskitchens.co.in",
       architecture: {
         image: "./docs/architecture/jinros-kitchen-system-architecture-v2.png",
         alt: "Jinros Kitchen system architecture showing the Angular client, Spring Boot microservices, PostgreSQL, Cloudinary, deployment, and monitoring.",
