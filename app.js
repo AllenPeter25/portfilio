@@ -141,6 +141,13 @@ function renderExperience() {
                 <span class="eyebrow">Professional experience</span>
                 <h3>${company.company}</h3>
               </div>
+              ${
+                company.logo
+                  ? `<div class="experience__logo">
+                      <img src="${company.logo.src}" alt="${company.logo.alt}" />
+                    </div>`
+                  : ""
+              }
             </div>
             <div class="experience__roles">
               ${company.roles

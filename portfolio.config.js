@@ -56,6 +56,10 @@ export const portfolio = {
   experience: [
     {
       company: "Netcracker Technology",
+      logo: {
+        src: "./assets/logos/netcracker.svg",
+        alt: "Netcracker Technology logo",
+      },
       location: "Bengaluru, Karnataka, India",
       period: "Sep 2022 — Present",
       roles: [
