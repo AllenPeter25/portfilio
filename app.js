@@ -417,8 +417,17 @@ function setupInteractions() {
   const musicToggle = $(".music-toggle");
   let portfolioScrollPosition = 0;
 
+  const scrollToSection = (hash, behavior = "smooth") => {
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+
+    target.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
+    target.scrollIntoView({ block: "start", behavior });
+  };
+
   const setMusicMode = (enteringMusicMode, { updateHistory = true } = {}) => {
-    if (enteringMusicMode) portfolioScrollPosition = window.scrollY;
+    const wasInMusicMode = document.body.classList.contains("music-mode");
+    if (enteringMusicMode && !wasInMusicMode) portfolioScrollPosition = window.scrollY;
 
     document.body.classList.toggle("music-mode", enteringMusicMode);
     musicToggle.setAttribute("aria-pressed", String(enteringMusicMode));
@@ -434,7 +443,9 @@ function setupInteractions() {
     }
 
     requestAnimationFrame(() => {
-      window.scrollTo({ top: enteringMusicMode ? 0 : portfolioScrollPosition, behavior: "auto" });
+      if (enteringMusicMode !== wasInMusicMode) {
+        window.scrollTo({ top: enteringMusicMode ? 0 : portfolioScrollPosition, behavior: "auto" });
+      }
       if (enteringMusicMode) {
         document.querySelectorAll("#music .reveal").forEach((element) => element.classList.add("is-visible"));
       }
@@ -460,10 +471,22 @@ function setupInteractions() {
   });
 
   navLinks.addEventListener("click", (event) => {
-    if (event.target.matches("a")) {
-      toggle.setAttribute("aria-expanded", "false");
-      navLinks.classList.remove("is-open");
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const hash = link.getAttribute("href");
+    if (!document.getElementById(hash.slice(1))) return;
+
+    event.preventDefault();
+    toggle.setAttribute("aria-expanded", "false");
+    navLinks.classList.remove("is-open");
+
+    if (document.body.classList.contains("music-mode")) {
+      setMusicMode(false, { updateHistory: false });
     }
+
+    window.history.pushState({ musicMode: false }, "", `/${hash}`);
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(hash)));
   });
 
   document.addEventListener("click", (event) => {
