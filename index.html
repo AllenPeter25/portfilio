@@ -39,6 +39,16 @@
           <span class="sr-only">Toggle navigation</span>
         </button>
         <div class="nav__links" id="nav-links"></div>
+        <button class="music-toggle" type="button" aria-pressed="false" aria-label="Switch to music mode">
+          <svg class="music-toggle__music-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 18V6l10-2v12M9 9l10-2" />
+            <circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" />
+          </svg>
+          <svg class="music-toggle__code-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" />
+          </svg>
+          <span>Music mode</span>
+        </button>
         <a class="button button--small nav__cta" href="mailto:apeter753@gmail.com">Let's talk</a>
       </nav>
     </header>
@@ -82,6 +92,16 @@
           <h2 id="credentials-title">Learning, leading,<br />and sharing.</h2>
         </div>
         <div class="credentials-grid" id="credentials-list"></div>
+      </section>
+
+      <section class="section section--music" id="music" aria-labelledby="music-title">
+        <div class="section-heading reveal">
+          <div>
+            <span class="eyebrow" id="music-eyebrow"></span>
+            <h2 id="music-title"></h2>
+          </div>
+        </div>
+        <div id="music-content"></div>
       </section>
 
       <section class="section contact" id="contact" aria-labelledby="contact-title">

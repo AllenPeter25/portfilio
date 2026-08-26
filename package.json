@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx serve .",
+    "dev": "npx serve -s .",
     "check": "node --check app.js && node --check portfolio.config.js"
   }
 }

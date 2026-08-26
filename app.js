@@ -37,6 +37,7 @@ function renderNavigation() {
   $("#nav-links").innerHTML = portfolio.navigation
     .map(({ label, href }) => `<a href="${href}">${label}</a>`)
     .join("");
+  $(".music-toggle span").textContent = portfolio.music.modeLabels.open;
 }
 
 function renderHero() {
@@ -302,10 +303,91 @@ function renderCredentials() {
       .join("")}`;
 }
 
+function renderMusic() {
+  const { music } = portfolio;
+  const orderedBands = [...music.bands].sort((first, second) => (second.order ?? 0) - (first.order ?? 0));
+
+  $("#music-eyebrow").textContent = music.eyebrow;
+  $("#music-title").innerHTML = music.heading.join("<br />");
+
+  $("#music-content").innerHTML = `
+    <div class="music-mode__intro reveal">
+      <div class="music-mode__intro-copy">
+        <p>${music.introduction}</p>
+        <ul class="music-instruments" aria-label="Instruments played">
+          ${music.instruments.map((instrument) => `<li>${instrument}</li>`).join("")}
+        </ul>
+      </div>
+      <strong>${music.tagline}</strong>
+    </div>
+    <section class="band-chronology glass reveal" aria-labelledby="band-chronology-title">
+      <button class="band-chronology__toggle" type="button" aria-expanded="${music.chronologyExpandedByDefault}" aria-controls="band-chronology-list" aria-label="${music.chronologyExpandedByDefault ? music.labels.collapseChronologyAria : music.labels.expandChronologyAria}">
+        <span class="band-chronology__title">
+          <small>${music.labels.chronologyKicker}</small>
+          <strong id="band-chronology-title">${music.labels.chronology}</strong>
+        </span>
+        <span class="band-chronology__count">${orderedBands.length} ${orderedBands.length === 1 ? "band" : "bands"}</span>
+        <span class="band-chronology__visual" aria-hidden="true">
+          <span class="band-chronology__bars"><i></i><i></i><i></i></span>
+          ${expandIcon}
+        </span>
+      </button>
+      <div class="bands-grid" id="band-chronology-list" role="list" aria-label="Bands, latest first" ${music.chronologyExpandedByDefault ? "" : "hidden"}>
+        ${orderedBands
+          .map(
+            (band, index) => `
+              <article class="band-card reveal" role="listitem" style="--delay: ${index * 90}ms">
+                <div class="band-card__heading">
+                  <div class="band-card__labels">
+                    <span>${music.labels.archive}</span>
+                    ${index === 0 ? `<strong>${music.labels.latest}</strong>` : ""}
+                  </div>
+                  <h3>${band.url ? `<a href="${band.url}" target="_blank" rel="noreferrer">${band.name}<span aria-hidden="true">↗</span></a>` : band.name}</h3>
+                  <p class="band-card__location">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 18s6-5.4 6-11A6 6 0 0 0 4 7c0 5.6 6 11 6 11Z"/><circle cx="10" cy="7" r="2"/></svg>
+                    ${band.location}
+                  </p>
+                </div>
+                ${
+                  band.subBands?.length
+                    ? `<aside class="band-card__subbands" aria-label="${music.labels.subBands}">
+                        <span>${music.labels.subBands}</span>
+                        <ul>
+                          ${band.subBands
+                            .map(
+                              (subBand) => `<li><strong>${subBand.url ? `<a href="${subBand.url}" target="_blank" rel="noreferrer">${subBand.name}<span aria-hidden="true">↗</span></a>` : subBand.name}</strong>${subBand.note ? `<small>${subBand.note}</small>` : ""}</li>`,
+                            )
+                            .join("")}
+                        </ul>
+                      </aside>`
+                    : ""
+                }
+                <dl class="band-meta">
+                  <div><dt>${music.labels.role}</dt><dd>${band.role}</dd></div>
+                  <div><dt>${music.labels.activeYears}</dt><dd>${band.activeYears}</dd></div>
+                </dl>
+                ${
+                  band.achievements?.length
+                    ? `<button class="band-card__highlights-toggle" type="button" aria-expanded="false" aria-controls="band-highlights-${index}">
+                        <span>${music.labels.viewHighlights}</span>${expandIcon}
+                      </button>
+                      <div class="band-achievements" id="band-highlights-${index}" hidden>
+                        <h4>${music.labels.achievements}</h4>
+                        <ul>${band.achievements.map((achievement) => `<li>${achievement}</li>`).join("")}</ul>
+                      </div>`
+                    : ""
+                }
+              </article>`,
+          )
+          .join("")}
+      </div>
+    </section>`;
+}
+
 function renderContact() {
   const { personal } = portfolio;
   $("#contact-panel").innerHTML = `
-    <span class="eyebrow">05 / Contact</span>
+    <span class="eyebrow">06 / Contact</span>
     <h2 id="contact-title">Have an interesting<br />problem to solve?</h2>
     <p>Let’s talk about the product, the people using it, and the cleanest way to bring it to life.</p>
     <div class="contact__actions">
@@ -332,6 +414,44 @@ function setupInteractions() {
   const navLinks = $("#nav-links");
   const header = $(".site-header");
   const glow = $(".cursor-glow");
+  const musicToggle = $(".music-toggle");
+  let portfolioScrollPosition = 0;
+
+  const setMusicMode = (enteringMusicMode, { updateHistory = true } = {}) => {
+    if (enteringMusicMode) portfolioScrollPosition = window.scrollY;
+
+    document.body.classList.toggle("music-mode", enteringMusicMode);
+    musicToggle.setAttribute("aria-pressed", String(enteringMusicMode));
+    musicToggle.setAttribute("aria-label", enteringMusicMode ? "Return to developer portfolio" : "Switch to music mode");
+    musicToggle.querySelector("span").textContent = enteringMusicMode
+      ? portfolio.music.modeLabels.close
+      : portfolio.music.modeLabels.open;
+    toggle.setAttribute("aria-expanded", "false");
+    navLinks.classList.remove("is-open");
+
+    if (updateHistory) {
+      window.history.pushState({ musicMode: enteringMusicMode }, "", enteringMusicMode ? "/music" : "/");
+    }
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: enteringMusicMode ? 0 : portfolioScrollPosition, behavior: "auto" });
+      if (enteringMusicMode) {
+        document.querySelectorAll("#music .reveal").forEach((element) => element.classList.add("is-visible"));
+      }
+    });
+  };
+
+  musicToggle.addEventListener("click", () => {
+    setMusicMode(!document.body.classList.contains("music-mode"));
+  });
+
+  if (window.location.pathname.replace(/\/+$/, "") === "/music") {
+    setMusicMode(true, { updateHistory: false });
+  }
+
+  window.addEventListener("popstate", () => {
+    setMusicMode(window.location.pathname.replace(/\/+$/, "") === "/music", { updateHistory: false });
+  });
 
   toggle.addEventListener("click", () => {
     const isOpen = toggle.getAttribute("aria-expanded") === "true";
@@ -347,6 +467,31 @@ function setupInteractions() {
   });
 
   document.addEventListener("click", (event) => {
+    const chronologyButton = event.target.closest(".band-chronology__toggle");
+    if (chronologyButton) {
+      const chronology = document.getElementById(chronologyButton.getAttribute("aria-controls"));
+      const isExpanded = chronologyButton.getAttribute("aria-expanded") === "true";
+      chronologyButton.setAttribute("aria-expanded", String(!isExpanded));
+      chronologyButton.setAttribute(
+        "aria-label",
+        isExpanded ? portfolio.music.labels.expandChronologyAria : portfolio.music.labels.collapseChronologyAria,
+      );
+      chronology.hidden = isExpanded;
+      return;
+    }
+
+    const highlightsButton = event.target.closest(".band-card__highlights-toggle");
+    if (highlightsButton) {
+      const highlights = document.getElementById(highlightsButton.getAttribute("aria-controls"));
+      const isExpanded = highlightsButton.getAttribute("aria-expanded") === "true";
+      highlightsButton.setAttribute("aria-expanded", String(!isExpanded));
+      highlightsButton.querySelector("span").textContent = isExpanded
+        ? portfolio.music.labels.viewHighlights
+        : portfolio.music.labels.hideHighlights;
+      highlights.hidden = isExpanded;
+      return;
+    }
+
     const architectureButton = event.target.closest(".project-card__architecture-toggle");
     if (architectureButton) {
       const architecture = document.getElementById(architectureButton.getAttribute("aria-controls"));
@@ -423,6 +568,7 @@ renderAbout();
 renderExperience();
 renderProjects();
 renderCredentials();
+renderMusic();
 renderContact();
 renderFooter();
 setupInteractions();
