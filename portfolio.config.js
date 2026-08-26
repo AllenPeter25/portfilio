@@ -223,8 +223,8 @@ export const portfolio = {
       {
         order: 6,
         name: "Ashq",
-        url: "",
-        role: "Lead guitarist",
+        url: "https://www.instagram.com/ashq_theband/",
+        role: "Lead Guitarist",
         activeYears: "2026 — Present",
         location: "Bangaluru",
         achievements: [],
@@ -233,7 +233,7 @@ export const portfolio = {
         order: 5,
         name: "MetalBlade",
         url: "",
-        role: "Bass guitarist/Electric guitarist",
+        role: "Bass Guitarist / Electric Guitarist",
         activeYears: "2019 — 2023",
         location: "Udupi",
         subBands: [
@@ -244,8 +244,8 @@ export const portfolio = {
         ],
         achievements: [
           "Runner-up at the TAPMI Battle of the Bands in Manipal (2020).",
-          "Performed at a public festival in Mangalore (2020).",
-          "Performed at Hotel Ashlesh (New Year's) Manipal 2023",
+          "Performed at a public festival in Mangalore",
+          "Performed at Hotel Ashlesh (New Year's) Manipal",
           "Participated in the Battle of the Bands at Atharva, TAPMI, Manipal (2019).",
           "Participated in the Battle of the Bands at NMAMIT, Nitte (2020).",
           "Participated in the Battle of the Bands at FMMC, Mangalore (2020).",
@@ -255,7 +255,7 @@ export const portfolio = {
         order: 4,
         name: "College Band",
         url: "",
-        role: "Electric guitarist/Bass guitarist",
+        role: "Electric Guitarist / Bass Guitarist",
         activeYears: "2018 — 2022",
         location: "Moodbidri",
         subBands: [
@@ -267,15 +267,15 @@ export const portfolio = {
           },
         ],
         achievements: [
-          "Participated in the Battle of the Bands at NITK, Surathkal.",
-          "Performed at various college cultural events.",
+          "Participated in the Battle of the Bands at NITK, Surathkal. (2019)",
+          "Performed at various College cultural events.",
         ],
       },
       {
         order: 3,
         name: "Frequency",
         url: "",
-        role: "Bass guitarist",
+        role: "Bass Guitarist",
         activeYears: "2018",
         location: "Udupi",
         achievements: [
@@ -287,19 +287,19 @@ export const portfolio = {
         order: 2,
         name: "PU College Band (Three-piece)",
         url: "",
-        role: "Electric guitarist",
+        role: "Electric Guitarist",
         activeYears: "2016 — 2017",
         location: "Udupi",
         achievements: [
           "Won the music category at the annual talent show in 2016 and 2017.",
-          "Performed at annual-day celebrations.",
+          "Performed at Annual Day Events.",
         ],
       },
       {
         order: 1,
         name: "Tie Guys",
         url: "",
-        role: "Acoustic guitarist",
+        role: "Acoustic Guitarist",
         activeYears: "2013 — 2016",
         location: "Udupi",
         achievements: [
