@@ -3,6 +3,12 @@ import { portfolio } from "./portfolio.config.js";
 const $ = (selector) => document.querySelector(selector);
 const createTags = (items) =>
   items.map((item) => `<li class="tag">${item}</li>`).join("");
+const escapeAttribute = (value) =>
+  String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 
 const arrowIcon = `
   <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -303,9 +309,71 @@ function renderCredentials() {
       .join("")}`;
 }
 
+function getPerformanceMedia(performance) {
+  const platform = performance.platform?.toLowerCase();
+
+  if (platform === "youtube" && performance.videoId) {
+    const videoId = encodeURIComponent(performance.videoId);
+    return {
+      embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1`,
+      sourceUrl:
+        performance.url ||
+        (performance.format === "short"
+          ? `https://www.youtube.com/shorts/${videoId}`
+          : `https://www.youtube.com/watch?v=${videoId}`),
+    };
+  }
+
+  if (platform === "instagram" && performance.url) {
+    const cleanUrl = performance.url.split("?")[0].replace(/\/+$/, "");
+    return { embedUrl: `${cleanUrl}/embed/?autoplay=1`, sourceUrl: performance.url };
+  }
+
+  return { embedUrl: "", sourceUrl: performance.url ?? "" };
+}
+
+function renderPerformance(performance, index, music) {
+  const { embedUrl, sourceUrl } = getPerformanceMedia(performance);
+  const platformKey = performance.platform?.toLowerCase();
+  const usesInstagramPreview = platformKey === "instagram" && sourceUrl;
+  const platform = platformKey === "youtube" ? "YouTube" : platformKey === "instagram" ? "Instagram" : "Media";
+  const credit = performance.credit ?? "Independent performance";
+  const format = performance.format === "short" ? "Short" : performance.format === "reel" ? "Reel" : "Video";
+  const title = escapeAttribute(performance.title);
+  const mediaPreview = performance.thumbnail
+    ? `<img src="${escapeAttribute(performance.thumbnail)}" alt="" loading="lazy" />`
+    : `<span class="performance-card__placeholder" aria-hidden="true"><i>▶</i><small>${platform}</small></span>`;
+
+  return `
+    <article class="performance-card ${performance.featured ? "performance-card--featured" : ""} ${performance.format === "short" || performance.format === "reel" ? "performance-card--vertical" : ""}" role="listitem" style="--delay: ${index * 80}ms">
+      <div class="performance-card__media">
+        ${
+          usesInstagramPreview
+            ? `<button class="performance-card__media-load performance-card__instagram-preview" type="button" data-embed-src="${escapeAttribute(embedUrl)}" data-embed-title="${title}" aria-label="${music.labels.playPerformance}: ${title}">
+                ${mediaPreview}
+                <span class="performance-card__play" aria-hidden="true">▶</span>
+              </button>`
+            : embedUrl
+            ? `<button class="performance-card__media-load" type="button" data-embed-src="${escapeAttribute(embedUrl)}" data-embed-title="${title}" aria-label="${music.labels.playPerformance}: ${title}">
+                ${mediaPreview}
+                <span class="performance-card__play" aria-hidden="true">▶</span>
+              </button>`
+            : `<div class="performance-card__media-pending">${mediaPreview}</div>`
+        }
+      </div>
+      <div class="performance-card__body">
+        <div class="performance-card__labels"><span>${platform}</span><span>${format}</span>${performance.year ? `<time>${performance.year}</time>` : ""}</div>
+        <h3>${performance.title}</h3>
+        <p class="performance-card__credit"><strong>${credit}</strong>${performance.role ? `<span>${performance.role}</span>` : ""}</p>
+        ${sourceUrl ? `<a href="${escapeAttribute(sourceUrl)}" target="_blank" rel="noreferrer">${platformKey === "instagram" ? music.labels.seeOnInstagram : `${music.labels.openPerformance} ${platform}`}<span aria-hidden="true">↗</span></a>` : ""}
+      </div>
+    </article>`;
+}
+
 function renderMusic() {
   const { music } = portfolio;
   const orderedBands = [...music.bands].sort((first, second) => (second.order ?? 0) - (first.order ?? 0));
+  const performances = (music.performances ?? []).filter(({ enabled = true }) => enabled);
 
   $("#music-eyebrow").textContent = music.eyebrow;
   $("#music-title").innerHTML = music.heading.join("<br />");
@@ -321,7 +389,7 @@ function renderMusic() {
       <strong>${music.tagline}</strong>
     </div>
     <section class="band-chronology glass reveal" aria-labelledby="band-chronology-title">
-      <button class="band-chronology__toggle" type="button" aria-expanded="${music.chronologyExpandedByDefault}" aria-controls="band-chronology-list" aria-label="${music.chronologyExpandedByDefault ? music.labels.collapseChronologyAria : music.labels.expandChronologyAria}">
+      <button class="band-chronology__toggle" type="button" aria-expanded="${music.chronologyExpandedByDefault}" aria-controls="band-chronology-list" aria-label="${music.chronologyExpandedByDefault ? music.labels.collapseChronologyAria : music.labels.expandChronologyAria}" data-expand-label="${music.labels.expandChronologyAria}" data-collapse-label="${music.labels.collapseChronologyAria}">
         <span class="band-chronology__title">
           <small>${music.labels.chronologyKicker}</small>
           <strong id="band-chronology-title">${music.labels.chronology}</strong>
@@ -380,6 +448,26 @@ function renderMusic() {
               </article>`,
           )
           .join("")}
+      </div>
+    </section>
+    <section class="band-chronology performance-showcase glass reveal" aria-labelledby="performance-showcase-title">
+      <button class="band-chronology__toggle" type="button" aria-expanded="${music.performancesExpandedByDefault}" aria-controls="performance-showcase-list" aria-label="${music.performancesExpandedByDefault ? music.labels.collapsePerformancesAria : music.labels.expandPerformancesAria}" data-expand-label="${music.labels.expandPerformancesAria}" data-collapse-label="${music.labels.collapsePerformancesAria}">
+        <span class="band-chronology__title">
+          <small>${music.labels.performancesKicker}</small>
+          <strong id="performance-showcase-title">${music.labels.performances}</strong>
+        </span>
+        <span class="band-chronology__count">${performances.length} ${performances.length === 1 ? "performance" : "performances"}</span>
+        <span class="band-chronology__visual" aria-hidden="true">
+          <span class="band-chronology__bars"><i></i><i></i><i></i></span>
+          ${expandIcon}
+        </span>
+      </button>
+      <div class="performance-grid" id="performance-showcase-list" role="list" aria-label="Selected music performances" ${music.performancesExpandedByDefault ? "" : "hidden"}>
+        ${
+          performances.length
+            ? performances.map((performance, index) => renderPerformance(performance, index, music)).join("")
+            : `<p class="performance-grid__empty" role="listitem">${music.labels.emptyPerformances}</p>`
+        }
       </div>
     </section>`;
 }
@@ -497,9 +585,23 @@ function setupInteractions() {
       chronologyButton.setAttribute("aria-expanded", String(!isExpanded));
       chronologyButton.setAttribute(
         "aria-label",
-        isExpanded ? portfolio.music.labels.expandChronologyAria : portfolio.music.labels.collapseChronologyAria,
+        isExpanded ? chronologyButton.dataset.expandLabel : chronologyButton.dataset.collapseLabel,
       );
       chronology.hidden = isExpanded;
+      return;
+    }
+
+    const mediaButton = event.target.closest(".performance-card__media-load");
+    if (mediaButton) {
+      const iframe = document.createElement("iframe");
+      iframe.src = mediaButton.dataset.embedSrc;
+      iframe.title = mediaButton.dataset.embedTitle;
+      iframe.loading = "eager";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+      iframe.setAttribute("scrolling", "no");
+      mediaButton.replaceWith(iframe);
       return;
     }
 

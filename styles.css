@@ -1880,6 +1880,242 @@ body.music-mode {
   display: none;
 }
 
+.band-chronology:not(.performance-showcase) {
+  margin-bottom: 24px;
+}
+
+.performance-showcase {
+  margin-bottom: 70px;
+}
+
+.performance-grid {
+  display: grid;
+  padding: 22px 12px 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.performance-grid[hidden] {
+  display: none;
+}
+
+.performance-card {
+  display: grid;
+  min-width: 0;
+  overflow: hidden;
+  grid-column: 1;
+  grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.75fr);
+  border: 1px solid rgba(255, 83, 107, 0.18);
+  border-radius: 14px;
+  background: rgba(12, 12, 17, 0.72);
+}
+
+.performance-card--vertical {
+  grid-column: 1;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+}
+
+.performance-card--featured {
+  grid-column: 1;
+  grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.75fr);
+}
+
+.performance-card__media {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #09090d;
+}
+
+.performance-card--vertical .performance-card__media {
+  aspect-ratio: 9 / 16;
+}
+
+.performance-card--featured .performance-card__media {
+  aspect-ratio: 16 / 9;
+}
+
+.performance-card__media-load,
+.performance-card__instagram-preview,
+.performance-card__media-pending,
+.performance-card__media iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.performance-card__media-load {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.performance-card__instagram-preview {
+  position: relative;
+  overflow: hidden;
+  background: #09090d;
+}
+
+.performance-card__media-load img,
+.performance-card__instagram-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 180ms ease, transform 240ms ease;
+}
+
+.performance-card__media-load:hover img,
+.performance-card__instagram-preview:hover img {
+  opacity: 0.78;
+  transform: scale(1.025);
+}
+
+.performance-card__placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-content: center;
+  gap: 7px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 83, 107, 0.18), transparent 9rem),
+    repeating-linear-gradient(105deg, transparent 0 24px, rgba(255, 255, 255, 0.018) 25px 26px),
+    #0d0c12;
+  color: #a89fa8;
+  text-align: center;
+}
+
+.performance-card__placeholder i {
+  color: #ff899a;
+  font-size: 1.4rem;
+  font-style: normal;
+}
+
+.performance-card__placeholder small {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.performance-card__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 50%;
+  background: rgba(10, 9, 13, 0.76);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.36);
+  color: #fff;
+  font-size: 0.8rem;
+  transform: translate(-50%, -50%);
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.performance-card__media-load:hover .performance-card__play,
+.performance-card__instagram-preview:hover .performance-card__play {
+  background: var(--metal);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.performance-card__body {
+  display: flex;
+  padding: 20px;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.performance-card--featured .performance-card__body,
+.performance-card--vertical .performance-card__body {
+  justify-content: center;
+}
+
+.performance-card__labels {
+  display: flex;
+  margin-bottom: 10px;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.performance-card__labels span,
+.performance-card__labels time {
+  padding: 3px 7px;
+  border: 1px solid rgba(255, 83, 107, 0.16);
+  border-radius: 999px;
+  color: #a89fa8;
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.performance-card__labels span:first-child {
+  color: var(--metal-warm);
+}
+
+.performance-card__body h3 {
+  margin: 0 0 7px;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  line-height: 1.18;
+}
+
+.performance-card__body p {
+  margin: 0 0 18px;
+  color: #99919c;
+  font-size: 0.72rem;
+}
+
+.performance-card__credit {
+  display: grid;
+  gap: 3px;
+}
+
+.performance-card__credit > span {
+  color: #99919c;
+}
+
+.performance-card__body p strong {
+  color: #dcd4d9;
+  font-weight: 650;
+}
+
+.performance-card__body > a {
+  display: inline-flex;
+  margin-top: auto;
+  align-items: center;
+  gap: 7px;
+  color: #ff9daa;
+  font-size: 0.66rem;
+  font-weight: 750;
+}
+
+.performance-card__body > a span {
+  transition: transform 180ms ease;
+}
+
+.performance-card__body > a:hover span {
+  transform: translate(2px, -2px);
+}
+
+.performance-grid__empty {
+  margin: 0;
+  padding: 28px 22px;
+  grid-column: 1 / -1;
+  border: 1px dashed rgba(255, 83, 107, 0.2);
+  border-radius: 12px;
+  color: #99919c;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
 .band-card {
   position: relative;
   width: min(100%, 920px);
@@ -2162,6 +2398,12 @@ body.music-mode {
 }
 
 @media (min-width: 761px) {
+  .performance-card__body .performance-card__credit {
+    gap: 5px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
   .band-card .band-meta div {
     display: flex;
     align-items: baseline;
@@ -2489,6 +2731,22 @@ body.music-mode {
     align-items: flex-start;
     flex-direction: column;
     gap: 10px;
+  }
+
+  .performance-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .performance-card,
+  .performance-card--vertical,
+  .performance-card--featured {
+    display: block;
+    grid-column: 1;
+  }
+
+  .performance-card--vertical {
+    width: min(100%, 360px);
+    justify-self: center;
   }
 
   .experience {

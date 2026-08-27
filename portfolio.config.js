@@ -143,7 +143,7 @@ export const portfolio = {
           extras: [
             {
               label: "Secretary, Music Club · 2020–2021",
-              url: "", // Add a URL to display this activity as an arrow link.
+              url: "",
             },
             {
               label:
@@ -161,7 +161,7 @@ export const portfolio = {
           extras: [
             {
               label: "Class Representative · 2017–2018",
-              url: "", // Add a URL to display this activity as an arrow link.
+              url: "",
             },
           ],
         },
@@ -196,14 +196,15 @@ export const portfolio = {
   music: {
     modeLabels: {
       open: "Music mode",
-      close: "Code mode",
+      close: "Dev mode",
     },
     eyebrow: "The amplified side",
     heading: ["Bands, stages", "and strings."],
     chronologyExpandedByDefault: true,
+    performancesExpandedByDefault: false,
     introduction: "When I'm not building applications, you'll usually find me playing guitar.",
     tagline: "Developer by profession. Guitarist by passion.",
-    instruments: ["Acoustic guitar", "Electric guitar", "Bass guitar"],
+    instruments: ["Electric guitar", "Bass guitar", "Acoustic guitar"],
     labels: {
       archive: "Band archive",
       subBands: "Related sub-bands",
@@ -212,13 +213,64 @@ export const portfolio = {
       achievements: "Highlights & achievements",
       chronology: "Associated Bands",
       chronologyKicker: "Career archive",
-      chronologySummary: "Latest to earliest",
       expandChronologyAria: "Expand band chronology",
       collapseChronologyAria: "Collapse band chronology",
+      performances: "Selected Performances",
+      performancesKicker: "Live & recorded",
+      expandPerformancesAria: "Expand selected performances",
+      collapsePerformancesAria: "Collapse selected performances",
+      emptyPerformances: "Performance videos and recordings will be added here soon.",
+      playPerformance: "Load embedded media",
+      openPerformance: "Open on",
+      seeOnInstagram: "See on Instagram",
       viewHighlights: "View highlights",
       hideHighlights: "Hide highlights",
       latest: "Latest",
     },
+    // Add YouTube videos/Shorts or public Instagram Reels here. `credit` can be
+    // a band name, "Solo performance", or "Supporting [artist name]". Use
+    // "Guest guitarist" or "Independent collaboration" for unpaid work.
+    // Example fields: title, year, credit, role, platform, format, videoId/url,
+    // thumbnail, featured, and enabled.
+    performances: [
+      {
+        enabled: true,
+        title: "ಈ ಯೆನ್ನಾಲೇ ಯಾ — Tulu Cover",
+        year: "",
+        credit: "Featured performance",
+        role: "Bass guitarist",
+        platform: "youtube",
+        format: "video",
+        videoId: "ciFBXatHo_w",
+        url: "https://www.youtube.com/watch?v=ciFBXatHo_w",
+        thumbnail: "https://i.ytimg.com/vi/ciFBXatHo_w/hqdefault.jpg",
+        featured: true,
+      },
+      {
+        enabled: true,
+        title: "Bekhayali — Jam Session",
+        year: "2026",
+        credit: "Ashq",
+        role: "Lead guitarist",
+        platform: "instagram",
+        format: "reel",
+        url: "https://www.instagram.com/p/DUYO4ocksnu/",
+        thumbnail: "./assets/music/bekhayali-jam.jpg",
+        featured: false,
+      },
+      {
+        enabled: true,
+        title: "Aadat",
+        year: "2026",
+        credit: "Ashq",
+        role: "Lead guitarist",
+        platform: "instagram",
+        format: "reel",
+        url: "https://www.instagram.com/p/DU5ovKKkuc3/",
+        thumbnail: "./assets/music/aadat.jpg",
+        featured: false,
+      },
+    ],
     bands: [
       {
         order: 6,
@@ -226,7 +278,7 @@ export const portfolio = {
         url: "https://www.instagram.com/ashq_theband/",
         role: "Lead Guitarist",
         activeYears: "2026 — Present",
-        location: "Bangaluru",
+        location: "Bengaluru",
         achievements: [],
       },
       {
@@ -238,13 +290,13 @@ export const portfolio = {
         location: "Udupi",
         subBands: [
           {
-            name: "Elementals",
+            name: "Elemental",
             url: "",
           },
         ],
         achievements: [
           "Runner-up at the TAPMI Battle of the Bands in Manipal (2020).",
-          "Performed at a public festival in Mangalore",
+          "Performed at a Public Fest in Mangalore",
           "Performed at Hotel Ashlesh (New Year's) Manipal",
           "Participated in the Battle of the Bands at Atharva, TAPMI, Manipal (2019).",
           "Participated in the Battle of the Bands at NMAMIT, Nitte (2020).",
