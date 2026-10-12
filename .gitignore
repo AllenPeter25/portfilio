@@ -5,3 +5,5 @@ portfolio-*.png
 
 # Private editable resume source; Resume.pdf remains public for downloads.
 ALLEN_CV.docx
+
+.vercel

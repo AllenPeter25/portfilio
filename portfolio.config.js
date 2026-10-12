@@ -128,6 +128,20 @@ export const portfolio = {
         alt: "Jinros Kitchen system architecture showing the Angular client, Spring Boot microservices, PostgreSQL, Cloudinary, deployment, and monitoring.",
       },
     },
+    {
+      number: "03",
+      title: "seekaudio - Audio Analysis & Music Retrieval",
+      type: "Personal Project - AI & Audio Analytics",
+      description:
+        "An interactive audio-analysis demo with genre estimation, acoustic measurements, and Mel spectrograms, backed by content-based music retrieval.",
+      contribution:
+        "Built a reproducible Python pipeline for 999 GTZAN tracks, extracted timbre, spectral, energy, and rhythm features, compared eight feature ablations, and deployed an upload-and-sample Streamlit demo.",
+      technologies: ["Python", "Librosa", "NumPy", "SciPy", "scikit-learn", "Streamlit"],
+      accent: "mint",
+      icon: "audio",
+      url: "https://seekcode-audio.streamlit.app/",
+      linkLabel: "Try audio demo",
+    },
   ],
 
   credentials: {

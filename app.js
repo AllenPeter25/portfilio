@@ -21,6 +21,11 @@ const expandIcon = `
   </svg>`;
 
 const projectIcons = {
+  audio: `
+    <svg viewBox="0 0 180 180" aria-hidden="true">
+      <rect x="26" y="35" width="128" height="110" rx="18" />
+      <path d="M45 82v16M63 65v50M81 52v76M99 70v40M117 58v64M135 82v16" stroke-linecap="round" />
+    </svg>`,
   enterprise: `
     <svg viewBox="0 0 180 180" aria-hidden="true">
       <rect x="30" y="35" width="120" height="110" rx="18" />
